@@ -90,11 +90,27 @@ Add below interface using `virsh edit` command.
       <model type='virtio'/>
     </interface>
 
+Modify `/etc/network/interfaces.d/eth1.cfg`. Add below.
+
+    # The public network interface
+    auto eth1
+    iface  eth1 inet manual
+    up ip link set dev $IFACE up
+    down ip link set dev $IFACE down
+
 ## On Operator Node
 
 ### Install Kolla
 
     $ sudo git clone https://github.com/openstack/kolla.git /usr/local/share/kolla
+
+### Configure kolla
+
+    $ sudo cp -r /usr/local/share/kolla/etc/kolla /etc/
+
+Modify /etc/kolla.globals.yml
+
+    $ cp ~/dev-kolla/conf/01-operator/etc/kolla/globals.yml /etc/kolla/globals.yml
 
 ### Run bootstrap script
 
@@ -111,6 +127,6 @@ Add below interface using `virsh edit` command.
     $ sudo pip install tox
     $ sudo tox -evenv -- echo Done
     $ sudo source .tox/venv/bin/activate
-    $ sudo kolla-build --base ubuntu --type source
+    $ sudo kolla-build --base ubuntu --type source --registry operator.local:4000 --push
 
 ## On Target Nodes
