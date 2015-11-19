@@ -12,7 +12,7 @@
 kolla_base_distro: "ubuntu"
 
 # Valid options are [ binary, source ]
-#kolla_install_type: "binary"
+kolla_install_type: "source"
 
 # This should be a VIP, an unused IP on your network that will float between
 # the hosts running keepalived for high-availibility. When running an All-In-One

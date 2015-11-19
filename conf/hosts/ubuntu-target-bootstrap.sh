@@ -3,6 +3,17 @@
 registry=operator.local
 registry_port=4000
 
+mkdir -p /etc/kolla
+chown -R yuanying:yuanying /etc/kolla/
+mkdir -p /usr/share/kolla
+chown -R yuanying:yuanying /usr/share/kolla
+mkdir -p /var/lib/kolla/
+chown -R yuanying:yuanying /var/lib/kolla/
+
+gpasswd -a yuanying docker
+
+cp ~yuanying/.ssh/authorized_keys ~root/.ssh/authorized_keys
+
 install_docker() {
     echo "Installing Docker"
     apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D

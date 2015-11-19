@@ -110,7 +110,7 @@ Modify `/etc/network/interfaces.d/eth1.cfg`. Add below.
 
 Modify /etc/kolla.globals.yml
 
-    $ cp ~/dev-kolla/conf/01-operator/etc/kolla/globals.yml /etc/kolla/globals.yml
+    $ sudo cp ~/dev-kolla/conf/01-operator/etc/kolla/globals.yml /etc/kolla/globals.yml
 
 ### Run bootstrap script
 
@@ -129,4 +129,6 @@ Modify /etc/kolla.globals.yml
     $ sudo source .tox/venv/bin/activate
     $ sudo kolla-build --base ubuntu --type source --registry operator.local:4000 --push
 
-## On Target Nodes
+### Deploy OpenStack
+
+    $ kolla-ansible deploy -i ~/dev-kolla/conf/01-operator/inventory
