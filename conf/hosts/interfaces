@@ -1,0 +1,16 @@
+auto lo
+iface lo inet loopback
+
+auto em1
+iface em1 inet manual
+
+auto br0
+iface br0 inet static
+  address 192.168.200.1
+  netmask 255.255.0.0
+  gateway 192.168.11.1
+  dns-nameservers 8.8.8.8
+  bridge_ports em1
+  bridge_stp off
+  bridge_fd 0
+  bridge_maxwait 0
