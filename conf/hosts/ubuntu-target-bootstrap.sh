@@ -3,16 +3,9 @@
 registry=operator.local
 registry_port=4000
 
-mkdir -p /etc/kolla
-chown -R yuanying:yuanying /etc/kolla/
-mkdir -p /usr/share/kolla
-chown -R yuanying:yuanying /usr/share/kolla
-mkdir -p /var/lib/kolla/
-chown -R yuanying:yuanying /var/lib/kolla/
+gpasswd -a $USER docker
 
-gpasswd -a yuanying docker
-
-cp ~yuanying/.ssh/authorized_keys ~root/.ssh/authorized_keys
+cp ~/.ssh/authorized_keys ~root/.ssh/authorized_keys
 
 install_docker() {
     echo "Installing Docker"

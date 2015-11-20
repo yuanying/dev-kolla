@@ -57,7 +57,7 @@ And reboot machine.
               --bridge br0 --cpu 2 --memory 8096 --disk 100 \
               --user-data ./init-04-compute.cfg
 
-## On Target Nodes (control/network/compute)
+## On Target Nodes (control/network/compute/storage)
 
 ### Update kernel
 
@@ -98,6 +98,15 @@ Modify `/etc/network/interfaces.d/eth1.cfg`. Add below.
     up ip link set dev $IFACE up
     down ip link set dev $IFACE down
 
+## On Target Nodes (storage)
+
+### Create volume group
+
+cf: http://docs.openstack.org/developer/kolla/cinder-guide.html
+
+    $ pvcreate /dev/sdb /dev/sdc
+    $ vgcreate cinder-volumes /dev/sdb /dev/sdc
+
 ## On Operator Node
 
 ### Install Kolla
@@ -132,3 +141,78 @@ Modify /etc/kolla.globals.yml
 ### Deploy OpenStack
 
     $ kolla-ansible deploy -i ~/dev-kolla/conf/01-operator/inventory
+
+### Configure OpenStack Client
+
+    $ cat > ~/openrc << END
+    export OS_PROJECT_DOMAIN_ID=default
+    export OS_USER_DOMAIN_ID=default
+    export OS_PROJECT_NAME=admin
+    export OS_USERNAME=admin
+    export OS_PASSWORD=password
+    export OS_AUTH_URL=http://192.168.201.100:5000
+    END
+    $ source ~/openrc
+    $ IMAGE_URL=http://download.cirros-cloud.net/0.3.4/
+    $ IMAGE=cirros-0.3.4-x86_64-disk.img
+    $ curl -L -o ./$IMAGE $IMAGE_URL/$IMAGE
+    $ glance image-create --name cirros --progress \
+                          --disk-format qcow2 --container-format bare \
+                          --progress --file ./$IMAGE
+    $ neutron net-create public --router:external --shared \
+                                --provider:physical_network physnet1 \
+                                --provider:network_type flat
+    $ neutron subnet-create --name public-subnet --disable-dhcp \
+                            --allocation-pool start=192.168.202.1,end=192.168.202.254 \
+                            --dns-nameserver 8.8.8.8 \
+                            --gateway 192.168.11.1 \
+                            public 192.168.0.0/16
+    $ neutron net-create demo-net --provider:network_type vxlan
+    $ neutron subnet-create demo-net 10.0.0.0/24 --name demo-subnet \
+                            --gateway 10.0.0.1 --dns-nameservers list=true 8.8.8.8
+    $ neutron router-create demo-router
+    $ neutron router-interface-add demo-router demo-subnet
+    $ neutron router-gateway-set demo-router public
+    $ neutron security-group-rule-create default \
+                                         --direction ingress --ethertype IPv4 \
+                                         --protocol icmp \
+                                         --remote-ip-prefix 0.0.0.0/0
+    $ neutron security-group-rule-create default \
+                                         --direction ingress --ethertype IPv4 \
+                                         --protocol tcp \
+                                         --port-range-min 22 \
+                                         --port-range-max 22 \
+                                         --remote-ip-prefix 0.0.0.0/0
+    $ neutron security-group-rule-create default \
+                                         --direction ingress --ethertype IPv4 \
+                                         --protocol tcp \
+                                         --port-range-min 8000 \
+                                         --port-range-max 8000 \
+                                         --remote-ip-prefix 0.0.0.0/0
+    $ neutron security-group-rule-create default \
+                                         --direction ingress --ethertype IPv4 \
+                                         --protocol tcp \
+                                         --port-range-min 8080 \
+                                         --port-range-max 8080 \
+                                         --remote-ip-prefix 0.0.0.0/0
+    $ nova keypair-add --pub-key ~/.ssh/id_rsa.pub default
+
+## Cleanup
+
+    $ docker stop $(docker ps -a -q)
+    $ docker rm $(docker ps -a -q)
+
+## Etc...
+
+    scp -rp ~/.ssh system@192.168.200.3:~/kollakeys
+
+    sudo adduser kolla
+    chmod 600 ~/kollakeys/kolla
+    sudo cp -p ~/kollakeys/kolla /etc/sudoers.d/kolla
+    sudo chown -R root:root /etc/sudoers.d/kolla
+    sudo cp -rp kollakeys ~kolla/.ssh
+    sudo chown -R kolla:kolla ~kolla/.ssh/
+
+    sudo rm -rf ~root/.ssh
+    sudo cp -rp ~kolla/.ssh ~root/.ssh
+    sudo chown -R root:root ~root/.ssh/
