@@ -117,7 +117,7 @@ cf: http://docs.openstack.org/developer/kolla/cinder-guide.html
 
     $ sudo cp -r /usr/local/share/kolla/etc/kolla /etc/
 
-Modify /etc/kolla.globals.yml
+Modify /etc/kolla/globals.yml
 
     $ sudo cp ~/dev-kolla/conf/01-operator/etc/kolla/globals.yml /etc/kolla/globals.yml
 
@@ -140,7 +140,7 @@ Modify /etc/kolla.globals.yml
 
 ### Deploy OpenStack
 
-    $ kolla-ansible deploy -i ~/dev-kolla/conf/01-operator/inventory
+    $ sudo kolla-ansible deploy -i ~/dev-kolla/conf/01-operator/inventory
 
 ### Configure OpenStack Client
 
