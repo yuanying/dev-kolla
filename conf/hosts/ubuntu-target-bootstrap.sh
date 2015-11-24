@@ -14,6 +14,7 @@ install_docker() {
     apt-get update
     apt-get install -y  docker-engine=1.8.2*
     sed -i -r "s,^[# ]*DOCKER_OPTS=.+$,DOCKER_OPTS=\"--insecure-registry $registry:$registry_port\"," /etc/default/docker
+    restart docker
 }
 
 install_python_deps() {
