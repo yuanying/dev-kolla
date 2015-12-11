@@ -6,7 +6,7 @@
 # Kolla options
 ###################
 # Valid options are [ COPY_ONCE, COPY_ALWAYS ]
-#config_strategy: "COPY_ONCE"
+config_strategy: "COPY_ALWAYS"
 
 # Valid options are [ centos, fedora, oraclelinux, ubuntu ]
 kolla_base_distro: "ubuntu"
@@ -85,8 +85,9 @@ docker_insecure_registry: "True"
 #nova_console: "novnc"
 
 # OpenStack services can be enabled or disabled with these options
-#enable_cinder: "yes"
-#enable_heat: "no"
+enable_cinder: "yes"
+enable_ceph: "yes"
+enable_heat: "yes"
 #enable_magnum: "no"
 
 

@@ -102,10 +102,10 @@ Modify `/etc/network/interfaces.d/eth1.cfg`. Add below.
 
 ### Create volume group
 
-cf: http://docs.openstack.org/developer/kolla/cinder-guide.html
+* cf: http://docs.openstack.org/developer/kolla/cinder-guide.html
+* cf: http://docs.openstack.org/developer/kolla/ceph-guide.html
 
-    $ pvcreate /dev/sdb /dev/sdc
-    $ vgcreate cinder-volumes /dev/sdb /dev/sdc
+Creating partition which named KOLLA_CEPH_OSD_BOOTSTRAP in OS installation.
 
 ## On Operator Node
 
@@ -167,12 +167,12 @@ Modify /etc/kolla/globals.yml
                             --dns-nameserver 8.8.8.8 \
                             --gateway 192.168.11.1 \
                             public 192.168.0.0/16
-    $ neutron net-create demo-net --provider:network_type vxlan
-    $ neutron subnet-create demo-net 10.0.0.0/24 --name demo-subnet \
+    $ neutron net-create private --provider:network_type vxlan
+    $ neutron subnet-create private 10.0.0.0/24 --name private-subnet \
                             --gateway 10.0.0.1 --dns-nameservers list=true 8.8.8.8
-    $ neutron router-create demo-router
-    $ neutron router-interface-add demo-router demo-subnet
-    $ neutron router-gateway-set demo-router public
+    $ neutron router-create private-router
+    $ neutron router-interface-add private-router private-subnet
+    $ neutron router-gateway-set private-router public
     $ neutron security-group-rule-create default \
                                          --direction ingress --ethertype IPv4 \
                                          --protocol icmp \
@@ -196,6 +196,12 @@ Modify /etc/kolla/globals.yml
                                          --port-range-max 8080 \
                                          --remote-ip-prefix 0.0.0.0/0
     $ nova keypair-add --pub-key ~/.ssh/id_rsa.pub default
+    $ curl -O http://uec-images.ubuntu.com/releases/14.04/release/ubuntu-14.04-server-cloudimg-amd64-disk1.img
+    $ openstack image create --container-format bare \
+                             --disk-format qcow2 \
+                             --public \
+                             --file ubuntu-14.04-server-cloudimg-amd64-disk1.img \
+                             ubuntu-14.04-server
 
 ## Cleanup
 

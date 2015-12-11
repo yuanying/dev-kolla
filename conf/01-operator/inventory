@@ -15,7 +15,7 @@
 192.168.200.3 network_interface=em1 neutron_external_interface=eth0 api_interface=em1 storage_interface=em1 tunnel_interface=em1
 
 [storage]
-192.168.200.3 network_interface=em1 neutron_external_interface=eth0
+192.168.200.4 network_interface=em1 neutron_external_interface=eth0 api_interface=em1 storage_interface=em1 tunnel_interface=em1
 
 # You can explicitly specify which hosts run each project by updating the
 # groups in the sections below. Common services are grouped together.
