@@ -25,12 +25,31 @@
               --bridge br0 --cpu 1 --memory 2024 --disk 40 \
               --user-data ./init-03-network.cfg
 
-    $ uvt-kvm create compute release=trusty \
+    $ uvt-kvm create compute01 release=trusty \
               --bridge br0 --cpu 2 --memory 8096 --disk 100 \
               --user-data ./init-04-compute.cfg
 
 ### on Host 02
 
-    $ uvt-kvm create compute release=trusty \
+    $ uvt-kvm create compute02 release=trusty \
               --bridge br0 --cpu 2 --memory 8096 --disk 100 \
               --user-data ./init-05-compute.cfg
+
+### on each Host
+
+#### Add NIC
+
+Add below interface using virsh edit command.
+
+    <interface type='bridge'>
+      <source bridge='br0'/>
+      <model type='virtio'/>
+    </interface>
+
+Modify /etc/network/interfaces.d/eth1.cfg. Add below.
+
+    # The public network interface
+    auto eth1
+    iface  eth1 inet manual
+    up ip link set dev $IFACE up
+    down ip link set dev $IFACE down
