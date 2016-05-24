@@ -46,10 +46,20 @@ Add below interface using virsh edit command.
       <model type='virtio'/>
     </interface>
 
+And re-define.
+
+    for domain in control network compute01 compute02; do
+      virsh shutdown $domain
+      virsh define /etc/libvirt/qemu/$domain.xml
+      virsh start $domain
+    done
+
 Modify /etc/network/interfaces.d/eth1.cfg. Add below.
 
+    cat > /etc/network/interfaces.d/eth1.cfg << END
     # The public network interface
     auto eth1
     iface  eth1 inet manual
     up ip link set dev $IFACE up
     down ip link set dev $IFACE down
+    END
