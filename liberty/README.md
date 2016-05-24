@@ -56,7 +56,7 @@ And re-define.
 
 Modify /etc/network/interfaces.d/eth1.cfg. Add below.
 
-    cat > /etc/network/interfaces.d/eth1.cfg << END
+    cat > /etc/network/interfaces.d/eth1.cfg << 'END'
     # The public network interface
     auto eth1
     iface  eth1 inet manual
