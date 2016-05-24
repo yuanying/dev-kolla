@@ -63,3 +63,31 @@ Modify /etc/network/interfaces.d/eth1.cfg. Add below.
     up ip link set dev $IFACE up
     down ip link set dev $IFACE down
     END
+
+## On Target Node
+
+### Clone dev-kolla
+
+    $ git clone https://github.com/yuanying/dev-kolla.git
+
+### Update kernel
+
+    echo "Kernel version $(uname -r)"
+    if [[ $(uname -r) != *"3.19"* ]]; then
+        echo "Going to update kernel image"
+        apt-get update
+        apt-get install -y linux-image-generic-lts-vivid
+        # VM needs to be rebooted for docker to pickup the changes
+        echo "Rebooting for kernel changes"
+        echo "After reboot re-run vagrant provision to finish provising the box"
+        reboot
+        # Sleep for a bit to let vagrant exit properly
+        sleep 3
+    fi
+
+### Install docker and dependencies
+
+Run conf hosts ubuntu-target-bootstrap.sh
+
+    $ sudo bash -c 'echo "192.168.200.11 operator.local" >> /etc/hosts'
+    $ sudo bash dev-kolla/liberty/node/ubuntu-bootstrap.sh
