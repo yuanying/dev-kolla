@@ -17,6 +17,7 @@ function configure_kolla {
 #     # Set network interfaces
 #     sed -i -r "s,^[# ]*network_interface:.+$,network_interface: \"eth0\"," /etc/kolla/globals.yml
 #     sed -i -r "s,^[# ]*neutron_external_interface:.+$,neutron_external_interface: \"eth1\"," /etc/kolla/globals.yml
+    echo "Skip configureing kolla"
 }
 
 # Configure the operator node and install some additional packages.

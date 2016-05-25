@@ -110,5 +110,8 @@ Run conf hosts ubuntu-target-bootstrap.sh
 Run operator/ubuntu-bootstrap.sh
 
     $ git clone https://git.openstack.org/openstack/kolla
+    $ cd kolla
+    $ git checkout -b 1.1.0 refs/tags/1.1.0
+    $ cd ..
     $ sudo bash dev-kolla/liberty/operator/ubuntu-bootstrap.sh kolla/
     $ sed -i -r "s,^[# ]*kolla_internal_vip_address:.+$,kolla_internal_vip_address: \"192.168.200.101\"," /etc/kolla/globals.yml
