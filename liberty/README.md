@@ -91,3 +91,24 @@ Run conf hosts ubuntu-target-bootstrap.sh
 
     $ sudo bash -c 'echo "192.168.200.11 operator.local" >> /etc/hosts'
     $ sudo bash dev-kolla/liberty/node/ubuntu-bootstrap.sh
+
+## On Operator Node
+
+### Clone dev-kolla
+
+    $ git clone https://github.com/yuanying/dev-kolla.git
+
+### Install docker and dependencies
+
+Run conf hosts ubuntu-target-bootstrap.sh
+
+    $ sudo bash -c 'echo "192.168.200.11 operator.local" >> /etc/hosts'
+    $ sudo bash dev-kolla/liberty/node/ubuntu-bootstrap.sh
+
+### Install operator node specific dependencies
+
+Run operator/ubuntu-bootstrap.sh
+
+    $ git clone https://git.openstack.org/openstack/kolla
+    $ sudo bash dev-kolla/liberty/operator/ubuntu-bootstrap.sh kolla/
+    $ sed -i -r "s,^[# ]*kolla_internal_vip_address:.+$,kolla_internal_vip_address: \"192.168.200.101\"," /etc/kolla/globals.yml
