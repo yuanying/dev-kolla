@@ -20,7 +20,7 @@ install_python_deps() {
     # Python
     apt-get update
     apt-get install -y python-mysqldb python-dev build-essential libssl-dev libffi-dev libxml2-dev libxslt-dev
-    easy_install pip
+    curl -s https://bootstrap.pypa.io/get-pip.py | sudo python
     pip install --upgrade docker-py
 }
 
