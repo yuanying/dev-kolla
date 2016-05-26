@@ -14,29 +14,29 @@
 
 ### on Host 01
 
-    $ uvt-kvm create operator release=trusty \
+    $ uvt-kvm create operator release=wily \
               --bridge br0 --cpu 1 --memory 4048 --disk 40 \
               --user-data ./init-01-operator.cfg
 
-    $ uvt-kvm create control release=trusty \
+    $ uvt-kvm create control release=wily \
               --bridge br0 --cpu 2 --memory 8096 --disk 80 \
               --user-data ./init-02-control.cfg
 
-    $ uvt-kvm create network release=trusty \
+    $ uvt-kvm create network release=wily \
               --bridge br0 --cpu 1 --memory 2024 --disk 40 \
               --user-data ./init-03-network.cfg
 
-    $ uvt-kvm create compute01 release=trusty \
+    $ uvt-kvm create compute01 release=wily \
               --bridge br0 --cpu 2 --memory 8096 --disk 100 \
               --user-data ./init-04-compute.cfg
 
 ### on Host 02
 
-    $ uvt-kvm create compute02 release=trusty \
+    $ uvt-kvm create compute02 release=wily \
               --bridge br0 --cpu 2 --memory 8096 --disk 100 \
               --user-data ./init-05-compute.cfg
 
-    $ uvt-kvm create storage01 release=trusty \
+    $ uvt-kvm create storage01 release=wily \
               --bridge br0 --cpu 2 --memory 4048 --disk 100 \
               --user-data ./init-06-storage.cfg
 
@@ -75,27 +75,12 @@ Modify /etc/network/interfaces.d/eth1.cfg. Add below.
 
     $ git clone https://github.com/yuanying/dev-kolla.git
 
-### Update kernel
-
-    echo "Kernel version $(uname -r)"
-    if [[ $(uname -r) != *"3.19"* ]]; then
-        echo "Going to update kernel image"
-        apt-get update
-        apt-get install -y linux-image-generic-lts-vivid
-        # VM needs to be rebooted for docker to pickup the changes
-        echo "Rebooting for kernel changes"
-        echo "After reboot re-run vagrant provision to finish provising the box"
-        reboot
-        # Sleep for a bit to let vagrant exit properly
-        sleep 3
-    fi
-
 ### Install docker and dependencies
 
 Run conf hosts ubuntu-target-bootstrap.sh
 
     $ sudo bash -c 'echo "192.168.200.11 operator.local" >> /etc/hosts'
-    $ sudo bash dev-kolla/liberty/node/ubuntu-bootstrap.sh
+    $ sudo bash dev-kolla/liberty/node/ubuntu-wily-bootstrap.sh
 
 ## On Operator Node
 
@@ -119,5 +104,9 @@ Run operator/ubuntu-bootstrap.sh
     $ git checkout -b 1.1.0 refs/tags/1.1.0
     $ cd ..
     $ sudo bash dev-kolla/liberty/operator/ubuntu-bootstrap.sh kolla/
+    $ sudo chown -R kolla:kolla /etc/kolla
     $ sed -i -r "s,^[# ]*kolla_internal_vip_address:.+$,kolla_internal_vip_address: \"192.168.200.101\"," /etc/kolla/globals.yml
     $ sed -i -r "s,^[# ]*enable_cinder:.+$,enable_cinder: \"yes\"," /etc/kolla/globals.yml
+
+
+    $ sudo kolla-ansible prechecks -i dev-kolla/liberty/operator/inventory
