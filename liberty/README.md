@@ -8,6 +8,7 @@
     -   Compute Node 01: 192.168.200.41, Mem 8096MB, Disk 100GB
 -   Host 02: 192.168.200.3
     -   Compute Node 02: 192.168.200.42, Mem 8096MB, Disk 100GB
+    -   Storage Node 01: 192.168.200.51, Mem 4048MB, Disk 100GB
 
 ## Start nodes
 
@@ -35,6 +36,10 @@
               --bridge br0 --cpu 2 --memory 8096 --disk 100 \
               --user-data ./init-05-compute.cfg
 
+    $ uvt-kvm create storage01 release=trusty \
+              --bridge br0 --cpu 2 --memory 4048 --disk 100 \
+              --user-data ./init-06-storage.cfg
+
 ### on each Host
 
 #### Add NIC
@@ -48,7 +53,7 @@ Add below interface using virsh edit command.
 
 And re-define.
 
-    for domain in control network compute01 compute02; do
+    for domain in control network compute01 compute02 storage01; do
       virsh shutdown $domain
       virsh define /etc/libvirt/qemu/$domain.xml
       virsh start $domain
@@ -115,3 +120,4 @@ Run operator/ubuntu-bootstrap.sh
     $ cd ..
     $ sudo bash dev-kolla/liberty/operator/ubuntu-bootstrap.sh kolla/
     $ sed -i -r "s,^[# ]*kolla_internal_vip_address:.+$,kolla_internal_vip_address: \"192.168.200.101\"," /etc/kolla/globals.yml
+    $ sed -i -r "s,^[# ]*enable_cinder:.+$,enable_cinder: \"yes\"," /etc/kolla/globals.yml
