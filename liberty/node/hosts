@@ -7,18 +7,18 @@ ff02::2 ip6-allrouters
 
 192.168.200.11 operator operator.local
 
-192.168.200.21 control01 control01.local
-192.168.200.22 control02 control02.local
-192.168.200.23 control03 control03.local
+192.168.200.21 kolla-control01 kolla-control01.local
+192.168.200.22 kolla-control02 kolla-control02.local
+192.168.200.23 kolla-control03 kolla-control03.local
 
-192.168.200.31 network01 network01.local
-192.168.200.32 network02 network03.local
-192.168.200.33 network03 network03.local
+192.168.200.31 kolla-network01 kolla-network01.local
+192.168.200.32 kolla-network02 kolla-network03.local
+192.168.200.33 kolla-network03 kolla-network03.local
 
-192.168.200.41 compute01 compute01.local
-192.168.200.42 compute02 compute02.local
-192.168.200.43 compute03 compute03.local
+192.168.200.41 kolla-compute01 kolla-compute01.local
+192.168.200.42 kolla-compute02 kolla-compute02.local
+192.168.200.43 kolla-compute03 kolla-compute03.local
 
-192.168.200.51 storage01 storage01.local
-192.168.200.52 storage02 storage02.local
-192.168.200.53 storage03 storage03.local
+192.168.200.51 kolla-storage01 kolla-storage01.local
+192.168.200.52 kolla-storage02 kolla-storage02.local
+192.168.200.53 kolla-storage03 kolla-storage03.local
