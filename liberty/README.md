@@ -55,7 +55,7 @@ Add below interface using virsh edit command.
 
 And re-define.
 
-    for domain in control network compute01; do
+    for domain in control01 network01 compute01; do
       virsh shutdown $domain
       virsh define /etc/libvirt/qemu/$domain.xml
       virsh start $domain
@@ -118,3 +118,5 @@ Run operator/ubuntu-bootstrap.sh
 
 
     $ sudo kolla-ansible prechecks -i dev-kolla/liberty/operator/inventory
+    $ sudo kolla-build
+    $ sudo kolla-ansible deploy -i dev-kolla/liberty/operator/inventory
