@@ -100,7 +100,7 @@ Run conf hosts ubuntu-target-bootstrap.sh
 
 Run conf hosts ubuntu-target-bootstrap.sh
 
-    $ sudo bash -c 'echo "192.168.200.11 operator.local" >> /etc/hosts'
+    $ sudo bash -c 'cp dev-kolla/liberty/node/hosts /etc/hosts'
     $ sudo bash dev-kolla/liberty/node/ubuntu-wily-bootstrap.sh
 
 ### Install operator node specific dependencies
