@@ -89,6 +89,7 @@ Run conf hosts ubuntu-target-bootstrap.sh
 
     $ sudo bash -c 'cp dev-kolla/liberty/node/hosts /etc/hosts'
     $ sudo bash dev-kolla/liberty/node/ubuntu-wily-bootstrap.sh
+    $ sudo systemctl restart docker
 
 ## On Operator Node
 
@@ -102,6 +103,7 @@ Run conf hosts ubuntu-target-bootstrap.sh
 
     $ sudo bash -c 'cp dev-kolla/liberty/node/hosts /etc/hosts'
     $ sudo bash dev-kolla/liberty/node/ubuntu-wily-bootstrap.sh
+    $ sudo systemctl restart docker
 
 ### Install operator node specific dependencies
 
