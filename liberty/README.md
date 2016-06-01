@@ -14,26 +14,28 @@
 
 ### on Host 01
 
+    $ uvt-simplestreams-libvirt sync release=wily arch=amd64
     $ uvt-kvm create operator release=wily \
               --bridge br0 --cpu 1 --memory 4048 --disk 40 \
               --user-data ./init-01-operator.cfg
 
-    $ uvt-kvm create control release=wily \
-              --bridge br0 --cpu 2 --memory 8096 --disk 80 \
+    $ uvt-kvm create control01 release=wily \
+              --bridge br0 --cpu 2 --memory 4048 --disk 80 \
               --user-data ./init-02-control.cfg
 
-    $ uvt-kvm create network release=wily \
+    $ uvt-kvm create network01 release=wily \
               --bridge br0 --cpu 1 --memory 2024 --disk 40 \
               --user-data ./init-03-network.cfg
 
     $ uvt-kvm create compute01 release=wily \
-              --bridge br0 --cpu 2 --memory 8096 --disk 100 \
+              --bridge br0 --cpu 2 --memory 4048 --disk 100 \
               --user-data ./init-04-compute.cfg
 
 ### on Host 02
 
+    $ uvt-simplestreams-libvirt sync release=wily arch=amd64
     $ uvt-kvm create compute02 release=wily \
-              --bridge br0 --cpu 2 --memory 8096 --disk 100 \
+              --bridge br0 --cpu 2 --memory 4048 --disk 100 \
               --user-data ./init-05-compute.cfg
 
     $ uvt-kvm create storage01 release=wily \
@@ -53,7 +55,13 @@ Add below interface using virsh edit command.
 
 And re-define.
 
-    for domain in control network compute01 compute02 storage01; do
+    for domain in control network compute01; do
+      virsh shutdown $domain
+      virsh define /etc/libvirt/qemu/$domain.xml
+      virsh start $domain
+    done
+
+    for domain in compute02 storage01; do
       virsh shutdown $domain
       virsh define /etc/libvirt/qemu/$domain.xml
       virsh start $domain
@@ -79,7 +87,7 @@ Modify /etc/network/interfaces.d/eth1.cfg. Add below.
 
 Run conf hosts ubuntu-target-bootstrap.sh
 
-    $ sudo bash -c 'echo "192.168.200.11 operator.local" >> /etc/hosts'
+    $ sudo bash -c 'cp dev-kolla/liberty/node/hosts /etc/hosts'
     $ sudo bash dev-kolla/liberty/node/ubuntu-wily-bootstrap.sh
 
 ## On Operator Node
@@ -93,7 +101,7 @@ Run conf hosts ubuntu-target-bootstrap.sh
 Run conf hosts ubuntu-target-bootstrap.sh
 
     $ sudo bash -c 'echo "192.168.200.11 operator.local" >> /etc/hosts'
-    $ sudo bash dev-kolla/liberty/node/ubuntu-bootstrap.sh
+    $ sudo bash dev-kolla/liberty/node/ubuntu-wily-bootstrap.sh
 
 ### Install operator node specific dependencies
 

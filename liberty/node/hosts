@@ -1,0 +1,24 @@
+127.0.0.1	localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+192.168.200.11 operator operator.local
+
+192.168.200.21 control01 control01.local
+192.168.200.22 control02 control02.local
+192.168.200.23 control03 control03.local
+
+192.168.200.31 network01 network01.local
+192.168.200.32 network02 network03.local
+192.168.200.33 network03 network03.local
+
+192.168.200.41 compute01 compute01.local
+192.168.200.42 compute02 compute02.local
+192.168.200.43 compute03 compute03.local
+
+192.168.200.51 storage01 storage01.local
+192.168.200.52 storage02 storage02.local
+192.168.200.53 storage03 storage03.local

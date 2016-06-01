@@ -9,11 +9,11 @@ REGISTRY=${REGISTRY_HOST}:${REGISTRY_PORT}
 
 function configure_kolla {
 #     # Use local docker registry
-#     sed -i -r "s,^[# ]*namespace *=.+$,namespace = ${REGISTRY}/lokolla," /etc/kolla/kolla-build.conf
-#     sed -i -r "s,^[# ]*push *=.+$,push = True," /etc/kolla/kolla-build.conf
-#     sed -i -r "s,^[# ]*docker_registry:.+$,docker_registry: \"${REGISTRY}\"," /etc/kolla/globals.yml
-#     sed -i -r "s,^[# ]*docker_namespace:.+$,docker_namespace: \"lokolla\"," /etc/kolla/globals.yml
-#     sed -i -r "s,^[# ]*docker_insecure_registry:.+$,docker_insecure_registry: \"True\"," /etc/kolla/globals.yml
+      sed -i -r "s,^[# ]*namespace *=.+$,namespace = ${REGISTRY}/lokolla," /etc/kolla/kolla-build.conf
+      sed -i -r "s,^[# ]*push *=.+$,push = True," /etc/kolla/kolla-build.conf
+      sed -i -r "s,^[# ]*docker_registry:.+$,docker_registry: \"${REGISTRY}\"," /etc/kolla/globals.yml
+      sed -i -r "s,^[# ]*docker_namespace:.+$,docker_namespace: \"lokolla\"," /etc/kolla/globals.yml
+      sed -i -r "s,^[# ]*docker_insecure_registry:.+$,docker_insecure_registry: \"True\"," /etc/kolla/globals.yml
 #     # Set network interfaces
 #     sed -i -r "s,^[# ]*network_interface:.+$,network_interface: \"eth0\"," /etc/kolla/globals.yml
 #     sed -i -r "s,^[# ]*neutron_external_interface:.+$,neutron_external_interface: \"eth1\"," /etc/kolla/globals.yml

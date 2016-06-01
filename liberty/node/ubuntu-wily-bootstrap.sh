@@ -32,7 +32,9 @@ function install_docker {
     echo "deb https://apt.dockerproject.org/repo ubuntu-wily main" > /etc/apt/sources.list.d/docker.list
     apt-get update
     apt-get install -y docker-engine
-    sed -i -r "s,(ExecStart)=(.+),\1=/usr/bin/docker daemon --insecure-registry ${REGISTRY} --registry-mirror=http://${REGISTRY}|" /lib/systemd/system/docker.service
+    sed -i -r "s|(ExecStart)=(.+)|\1=/usr/bin/docker daemon --insecure-registry ${REGISTRY} --registry-mirror=http://${REGISTRY}|" /lib/systemd/system/docker.service
+    sed -i 's|^MountFlags=.*|MountFlags=shared|' /lib/systemd/system/docker.service
+
 
     systemctl daemon-reload
     systemctl enable docker
@@ -41,3 +43,5 @@ function install_docker {
 
 prep_work
 install_docker
+
+sudo gpasswd -a $USER docker
